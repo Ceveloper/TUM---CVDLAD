@@ -88,7 +88,28 @@ Both distributions are 8-dimensional, diagonal Gaussian distributions. Here,  8 
 
 
 How are the distributions integrated into the method? A sample from the distribution <img src="https://render.githubusercontent.com/render/math?math=\eta ~ \mathcal{N}(\mu, \sigma^2)">is given as input to the generator (the convolutional GRU) in the Prediction module.  This input is constant for every future time step. At train time it is sampled from the future distribution, while at test time from the present distribution.  
-So at train time, the future distribution sees the past and the future of video sequences. Since the data are diverse, the future distribution will naturally be multi-modal. But how can the present distribution be multimodal,  if it never sees in person the modes of the future? By forcing the present distribution to be similar to the future distribution via KL divergence. This happens in the probabilistic loss. [eq]
+So at train time, the future distribution sees the past and the future of video sequences. Since the data are diverse, the future distribution will naturally be multi-modal. But how can the present distribution be multimodal,  if it never sees in person the modes of the future? By forcing the present distribution to be similar to the future distribution via KL divergence. This happens in the probabilistic loss.
+
+<img src=
+"https://render.githubusercontent.com/render/math?math=%5CLarge+%5Cdisplaystyle+%5Cbegin%7Balign%2A%7D%0AL_%7Bprobabilistic%7D+%3D+D_%7BKL%7D+%28F%28%5Ccdotp%7C+Z_t%2C+...%2C+Z_%7Bt%2BN_f%7D%5C%7CP%28%5Ccdotp%7C+Z_t%29%29%0A%5Cend%7Balign%2A%7D%0A" 
+alt="\begin{align*}
+L_{probabilistic} = D_{KL} (F(\cdotp| Z_t, ..., Z_{t+N_f}\|P(\cdotp| Z_t))
+\end{align*}
+">
  
 As you see, the present distribution is not used at train time, but it is still trained. At test time, we can sample from it and generate diverse and realistic futures.
+
+
+## Results
+Since there are no other end-to-end methods to compare against, the authors simply substitute the Dynamics module with other other spatio-temporal architectures. They choose the convolutional GRU in [], 3D ResNet[], and the 3D inception network from []. In this way, they obtain 3 deterministic and 3 probabilistic networks against which they can compare their method.  form the evaluation their reach the following conclusions:
+ * Their method achieves the best performance in both the deterministic and the probabilistic case, according to the unified perception metric.  This motivates both the probabilistic module and the temporal block. They are the reasons for the performance improvement.
+ 
+ *  The probabilistic approach improves the performance of every method
+ 
+ * Their method generates the most accurate and diverse futures (see the diversity distance metric DDM).
+ 
+This kind of evaluation is a bit restrictive. So to compare with a broader scientific community they also evaluate their method on future semantic segmentation with the Cityscapes dataset. Cityscapes is not as challenging as the previous data collection because it does not present bad weather or night conditions. It is entirely collected in Germany. Here some considerations from their comparison against Navabi[5] and Chiu[6].
+ * This method achieves the best performance.
+ * The future is predicted for 5 and 10 steps in the future, covering respectively 0.29s and 0.59s. This is a relatively high value. Navabi[5] and Chiu[6] were presented for 3 or 4 steps.
+ * This method achieves a score of 0.464 mean IoU for 5 steps prediction. The state of the art on Cityscapes for present semantic segmentation is around 0.85 mIoU[4], almost double as much. As you can see, the problem of future semantic segmentation has not been solved yet and is more challenging than the present case. 
 
