@@ -137,8 +137,8 @@ Here our car waits in a line by a traffic light. Sampling from the present distr
 This example shows a crosswalk at a red light. Some people cross the street from the left, and at the present time a new pedestrian appears in the image from the right.
 ![](https://cdn.sanity.io/images/rmgve84j/production/d5695c48c69314f3c62fc0be3954ad80db51e792-1440x224.gif)
  In the future prediction, this person keeps walking in the same direction and crosses the street. While the overall motion is correctly represented, the oddly-shaped red silhouettes that represent pedestrians show room for improvement.
- 
- #### Complex Intersection
- Here we are at an intersection, with another vehicle and a bus coming from the opposite direction.
- ![](https://cdn.sanity.io/images/rmgve84j/production/66625d679d021aaf943d78e4b082768da9fc1afc-2195x1026.gif?w=1920&h=897&fit=crop)
- The generated futures show our car waiting, slowing down, turning right, or turning left. Take a look at the future segmentation of the right turn. Here the method seems to fail. Did you notice? The bus almost disappears, instead of continuing straight or turning right. Since our car is also turning right, here it is particularly important to understand how the bus will move. As I mentioned before, 2 seconds in the future is pretty far. If it was a real driving scenario, the network may have corrected itself. Seeing what the bus does after 0.5 seconds would have improved the prediction of the future 1.5 seconds.
+
+#### Complex Intersection
+Here we are at an intersection, with another vehicle and a bus coming from the opposite direction.
+![](https://cdn.sanity.io/images/rmgve84j/production/66625d679d021aaf943d78e4b082768da9fc1afc-2195x1026.gif?w=1920&h=897&fit=crop)
+The generated futures show our car waiting, slowing down, turning right, or turning left. Take a look at the future segmentation of the right turn. Here the method seems to fail. Did you notice? The bus almost disappears, instead of continuing straight or turning right. Since our car is also turning right, here it is particularly important to understand how the bus will move. As I mentioned before, 2 seconds in the future is pretty far. If it was a real driving scenario, the network may have corrected itself. Seeing what the bus does after 0.5 seconds would have improved the prediction of the future 1.5 seconds.
