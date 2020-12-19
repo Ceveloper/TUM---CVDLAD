@@ -27,7 +27,7 @@ The Perception module takes as input 5 frames of the past 1 second and encodes t
 Those features are fed to the Dynamics module, a 3D convolutional network that contains a novel module, the Temporal Block. This module extracts in parallel local and global features. On a local level, it separates the convolutions acquiring in parallel spatial features, vertical motion, horizontal motion, and overall motion. I will not dive deeper into it, since its analysis in the paper is pretty straightforward. The Dynamics module outputs the spatio-temporal representation <img src="https://render.githubusercontent.com/render/math?math=z_{t}">, which contains information up to present time <img src="https://render.githubusercontent.com/render/math?math=t">.  
 
 This representation goes into the Prediction module. Here a generator, a convolutional GRU, outputs future codes <img src="https://render.githubusercontent.com/render/math?math=g_{t%2Bi}"> for each future time step <img src="https://render.githubusercontent.com/render/math?math=t%2Bi">. The codes are then decoded to predict segmentation, depth, and flow maps for each one of the 10 future time steps, covering a total of 2 seconds.  
-The spatio-temporal representation <img src="https://render.githubusercontent.com/render/math?math=z_{t}">  goes also into the Control module. This module predicts the car controls -  velocity, acceleration, steering angle, and angular velocity - for each future time step.
+The spatio-temporal representation <img src="https://render.githubusercontent.com/render/math?math=z_{t}">  goes also into the Control module. This module predicts the car controls -  velocity <img src="https://render.githubusercontent.com/render/math?math=\v">, acceleration <img src="https://render.githubusercontent.com/render/math?math=\dot{v}">, steering angle <img src="https://render.githubusercontent.com/render/math?math=\theta">, and angular velocity <img src="https://render.githubusercontent.com/render/math?math=\dot{\theta}">- for each future time step.
 
 At this point, the whole method does operate in a deterministic setting (the input to the generator for each time step is the zero vector).  How to make the method probabilistic? By adding the module containing the future and present distribution, the probabilistic module. More about it in the probabilistic loss section.
 
@@ -52,28 +52,18 @@ L_{future\_pred} &= \lambda_{s} \sum_{i=0}^{N_f -1} \gamma^i L_{segm}^{t+i} + \l
 \end{align*}
 ">
 
-As you may have already seen if you are familiar with reinforcement learning, the loss for 3 timesteps in the future and the loss for 10 timesteps in the future do not have the same influence. The losses of each timestep <img src="https://render.githubusercontent.com/render/math?math=t"> are not simply added together; before they are multiplied with a value <img src="https://render.githubusercontent.com/render/math?math=\gamma^t">, the weighted discount term. Since <img src="https://render.githubusercontent.com/render/math?math=0<\gamma<1">, <img src="https://render.githubusercontent.com/render/math?math=\gamma^t"> gets always smaller for increasing <img src="https://render.githubusercontent.com/render/math?math=0<t<N_f">. In this way, the further we go into the future, the less does a loss count in the overall loss. Indeed, while driving the next half-second is more relevant than the future in 2 seconds, right?
+As you may have already seen if you are familiar with reinforcement learning, the loss for 3 timesteps in the future and the loss for 10 timesteps in the future do not have the same influence. The losses of each timestep <img src="https://render.githubusercontent.com/render/math?math=t"> are not simply added together; before they are multiplied with a value <img src="https://render.githubusercontent.com/render/math?math=\gamma^t">, where <img src="https://render.githubusercontent.com/render/math?math=\gamma"> is the weighted discount term. Since <img src="https://render.githubusercontent.com/render/math?math=0<\gamma<1">, <img src="https://render.githubusercontent.com/render/math?math=\gamma^t"> gets always smaller for increasing <img src="https://render.githubusercontent.com/render/math?math=0<t<N_f">. In this way, the further we go into the future, the less does a loss count in the overall loss. Indeed, while driving the next half-second is more relevant than the future in 2 seconds, right?
 
  
  
 ### The control loss. 
-Here the predicted controls are extrapolated and compared to the expert’s control actions (Conditional Imitation learning ). The authors have access to these actions thanks to the company Wayve, which collaborated in the publication of the paper. Each future timestep is weighted via the discount term gamma analogous to the prediction loss.
-
+Here the predicted controls are extrapolated and compared to the expert’s control actions <img src="https://render.githubusercontent.com/render/math?math=v_{t}^{gt}"> and <img src="https://render.githubusercontent.com/render/math?math=\theta_{t}^{gt}">.  The authors have access to these actions thanks to the company Wayve, the workplace of some of the paper authors. Exploiting expert's actions as ground truth is called *Conditional Imitation learning*. 
 
 <img src=
-"https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cbegin%7Balign%2A%7D%0AR%28g%29+%26%3D+%5Cfrac%7B1%7D%7Bn%7D+%5Csum_%7Bi%3D1%7D%5E%7Bn%7D+%5Cell%28y_i%2Cg%28x_i%29%29%5C%5C%0A%26%3D%5Cfrac%7B1%7D%7B2n%7D+%28%5Cmathbf%7BX%7D%5Cboldsymbol%7Bw%7D-%5Cmathbf%7By%7D%29%5ET+%28%5Cmathbf%7BX%7D%5Cboldsymbol%7Bw%7D-%5Cmathbf%7By%7D%29%0A%5Cend%7Balign%2A%7D%0A" 
+"https://render.githubusercontent.com/render/math?math=%5CLarge+%5Cdisplaystyle+%5Cbegin%7Balign%2A%7D%0AL_%7Bcontrol%7D+%26%3D++%5Csum_%7Bi%3D0%7D%5E%7BN_c-1%7D+%5Cgamma_%7Bc%7D%5Ei+%28%28v_%7Bt%2B1%7D%5E%7Bgt%7D-%28v_t+%2B+i+%5Cdot%7Bv%7D_t%29%29%5E2+%2B++%28%5Ctheta_%7Bt%2B1%7D%5E%7Bgt%7D-%28%5Ctheta_t%2B+i+%5Cdot%7B%5Ctheta%7D_t%29%29%5E2%29%0A%5Cend%7Balign%2A%7D%0A" 
 alt="\begin{align*}
-R(g) &= \frac{1}{n} \sum_{i=1}^{n} \ell(y_i,g(x_i))\\
-&=\frac{1}{2n} (\mathbf{X}\boldsymbol{w}-\mathbf{y})^T (\mathbf{X}\boldsymbol{w}-\mathbf{y})
+L_{control} &=  \sum_{i=0}^{N_c-1} \gamma_{c}^i ((v_{t+1}^{gt}-(v_t + i \dot{v}_t))^2 +  (\theta_{t+1}^{gt}-(\theta_t+ i \dot{\theta}_t))^2)
 \end{align*}
 ">
 
-![](https://render.githubusercontent.com/render/math?math=e^{i %2B\pi} =x%2B1)
-
-<img src="https://render.githubusercontent.com/render/math?math=e^{i %2B\pi} =x%2B1">
-
-![\begin{align*}
-R(g) &= \frac{1}{n} \sum_{i=1}^{n} \ell(y_i,g(x_i))\\
-&=\frac{1}{2n} (\mathbf{X}\boldsymbol{w}-\mathbf{y})^T (\mathbf{X}\boldsymbol{w}-\mathbf{y})
-\end{align*}
-](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cbegin%7Balign%2A%7D%0AR%28g%29+%26%3D+%5Cfrac%7B1%7D%7Bn%7D+%5Csum_%7Bi%3D1%7D%5E%7Bn%7D+%5Cell%28y_i%2Cg%28x_i%29%29%5C%5C%0A%26%3D%5Cfrac%7B1%7D%7B2n%7D+%28%5Cmathbf%7BX%7D%5Cboldsymbol%7Bw%7D-%5Cmathbf%7By%7D%29%5ET+%28%5Cmathbf%7BX%7D%5Cboldsymbol%7Bw%7D-%5Cmathbf%7By%7D%29%0A%5Cend%7Balign%2A%7D%0A)
+Each future timestep is weighted via the discount term gamma analogous to the prediction loss.
