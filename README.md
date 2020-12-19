@@ -18,8 +18,13 @@ First, let’s reason about the method in terms of input and output. The input i
 
 You can read this article without problems after this short introduction. But if you are not familiar with these three concepts, you can inform yourself  - there are many great blogs out there.
 
+### Network
+Let’s take a look at the data flow and see how the network is constructed. To allow a good grasp of the gradient flow, the red squares in the images show the variables involved in the loss computation.
 
+<img src="images/Network_loss_circles.png" />
 
-
-<img src="images/apolloscape_hr.png" alt="drawing" width="500"/>   <img src="images/apolloscape_lr.png" alt="drawing" width="500"/> 
-<br>
+The Perception module takes as input 5 frames of the past 1 second and encodes them into segmentation, flow, and depth information. That information is concatenated i.e. fused together for each input frame to produce the perception feature x_. 
+Those features are fed to the Dynamics module, a 3D convolutional network that contains a novel module, the Temporal Block. This module extracts in parallel local and global features. On a local level, it separates the convolutions acquiring in parallel spatial features, vertical motion, horizontal motion, and overall motion. I will not dive deeper into it, since its analysis in the paper is pretty straightforward. The Dynamics module outputs the spatio-temporal representation zt, which contains information up to present time t. 
+This representation goes into the Prediction module. Here a generator, a convolutional GRU, outputs future codes g_t for each future time step t+i, for a total of 10 timesteps. The codes are then decoded to predict segmentation, depth, and flow maps for each one of the 10 future time steps, covering a total of 2 seconds. 
+The spatio-temporal representation z_t  goes also into the Control module. This module predicts the car controls -  velocity, acceleration, steering angle, and angular velocity - for each future time step. 
+At this point, the whole method does operate in a deterministic setting (the input to the generator for each time step is the zero vector).  How to make the method probabilistic? By adding the module containing the future and present distribution, the probabilistic module. More about it in the probabilistic loss section.
