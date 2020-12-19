@@ -6,9 +6,9 @@ Being able to predict possible scenarios does indeed help while driving, right? 
 You may ask "has this not be done already? Why is this paper different?". You see, the problem of future prediction is by far not as popular as image classification, but of course it has already been addressed.  But previous works had limitations.  
  * No end-to-end methods. This means that they did not carry out the whole process from the beginning - from the sequence of 2D data -  to the end - to the prediction and the car controls.  
  * Fail to model Multi-Agent interactions, by assuming for dynamics agents such as vehicles and pedestrians to act independently from each other.  
- * Work with low-resolution input or simulated and unrealistic data. As you can imagine, guessing what an image depicts it's not so easy if the image looks like the one on the left, instead of the one on the right. <p float="right"><img src="images/apolloscape_lr.png" width="450" /> <img src="images/apolloscape_hr.png" width="450" /> </p> On top of that, using video frames from simulated or unrealistic data does simplify the task. So, even if the evaluation is still indicative, it is controversial whether the model is capable of facing real-life situations. Reality is indeed much more challenging, unpredictable, diverse, and complicated than a game or a simulation.
+ * Work with low-resolution input or simulated and unrealistic data. As you can imagine, guessing what an image depicts it's not so easy if the image looks like the one on the left, instead of the one on the right. <p float="right"> <img src="images/apolloscape_lr.png" width="450" /> <img src="images/apolloscape_hr.png" width="450" /> </p> On top of that, using video frames from simulated or unrealistic data does simplify the task. So, even if the evaluation is still indicative, it is controversial whether the model is capable of facing real-life situations. Reality is indeed much more challenging, unpredictable, diverse, and complicated than a game or a simulation.
 
-### Input & Output
+## Input & Output
 First, let’s reason about the method in terms of input and output. The input is a sequence of images, of 2D frames from videos. The predicted driving controls are velocity, acceleration, steering angle, and angular velocity. Then, how to show the predicted future? With a video, a sequence of  2D images as the input?  It may work. But we can do it smarter: let's predict semantic segmentation, depth, and optical flow. In other words,
  <p> <img align="right" src="images/segmentation_depth_and_flow.gif" alt> </p>
  
@@ -18,7 +18,7 @@ First, let’s reason about the method in terms of input and output. The input i
 
 You can read this article without problems after this short introduction. But if you are not familiar with these three concepts, you can inform yourself  - there are many great blogs out there.
 
-### Network
+## Network
 Let’s take a look at the data flow and see how the network is constructed. To allow a good grasp of the gradient flow, the red squares in the images show the variables involved in the loss computation.
 
 <img src="images/Network_loss_circles.png" />
@@ -31,7 +31,7 @@ The spatio-temporal representation <img src="https://render.githubusercontent.co
 
 At this point, the whole method does operate in a deterministic setting (the input to the generator for each time step is the zero vector).  How to make the method probabilistic? By adding the module containing the future and present distribution, the probabilistic module. More about it in the probabilistic loss section.
 
-### Loss
+## Loss
 Here the focus is on the exciting mathematical formulations. Yes, math. Math is powerful. If you are still reading, let’s go through the losses. The total loss is constructed by weighting and adding up three single losses:
 
  <img align="center" src=
@@ -41,7 +41,7 @@ L &= \lambda_{fp} L_{future\_pred} +\lambda_{c} L_{control} + \lambda_{p} L_{pro
 \end{align*}
 ">
 
-#### The prediction loss. 
+### The prediction loss. 
 First, where does the ground truth come from? From a teacher model. The encoders in the perception module are originally from two well-known autoencoder architectures ([] for segmentation and depth, [] for optical flow). Those autoencoders are pretrained jointly and then separated. While the encoders end up making part of the Perception module, the Decoders are used as a teacher module. The teacher takes the perception features of future frames and decodes them providing a pseudo ground-truth (note that these are other decoders as the ones in the prediction module).  
 For each one of the future time steps <img src="https://render.githubusercontent.com/render/math?math=N_f">, the predicted maps are compared to the output of a teacher model. For segmentation, via cross-entropy bootstrapping loss[] <img src="https://render.githubusercontent.com/render/math?math=L_{segm}">,  for depth via scale-invariant depth loss[] <img src="https://render.githubusercontent.com/render/math?math=L_{depth}">,  and for optical flow via the Huber loss <img src="https://render.githubusercontent.com/render/math?math=L_{flow}">. 
 
@@ -56,7 +56,8 @@ As you may have already seen if you are familiar with reinforcement learning, th
 
  
  
-The control loss. Here the predicted controls are extrapolated and compared to the expert’s control actions (Conditional Imitation learning ). The authors have access to these actions thanks to the company Wayve, which collaborated in the publication of the paper. Each future timestep is weighted via the discount term gamma analogous to the prediction loss.
+### The control loss. 
+Here the predicted controls are extrapolated and compared to the expert’s control actions (Conditional Imitation learning ). The authors have access to these actions thanks to the company Wayve, which collaborated in the publication of the paper. Each future timestep is weighted via the discount term gamma analogous to the prediction loss.
 
 
 <img src=
