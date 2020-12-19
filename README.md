@@ -31,7 +31,7 @@ The spatio-temporal representation <img src="https://render.githubusercontent.co
 
 At this point, the whole method does operate in a deterministic setting (the input to the generator for each time step is the zero vector).  How to make the method probabilistic? By adding the module containing the future and present distribution, the probabilistic module. More about it in the probabilistic loss section.
 
-## Loss
+## Losses
 Here the focus is on the exciting mathematical formulations. Yes, math. Math is powerful. If you are still reading, let’s go through the losses. The total loss is constructed by weighting and adding up three single losses:
 
  <img align="center" src=
@@ -87,7 +87,11 @@ The authors define two distributions:
 Both distributions are 8-dimensional, diagonal Gaussian distributions. Here,  8  uncorrelated dimensions i.e. random variables are enough to represent the future in latent space. Most important, both distributions are **multi-modal**. They cover the different modes i.e. possibilities of the future. Remember? There is no “one future” but there are more possible futures with similar likelihood. On the right you can see a 2-dimensional (bivariate) multimodal distribution, where each "bump" represents a different mode.
 
 
-How are the distributions integrated into the method? A sample from the distribution <img src="https://render.githubusercontent.com/render/math?math=\eta ~ \mathcal{N}(\mu, \sigma^2)">is given as input to the generator (the convolutional GRU) in the Prediction module.  This input is constant for every future time step. At train time it is sampled from the future distribution, while at test time from the present distribution.  
+#### How are the distributions integrated into the method? 
+
+<img src="images/Probabilistic_prediction_modules.png" width="550"/>
+
+A sample from the distribution <img src="https://render.githubusercontent.com/render/math?math=\eta ~ \mathcal{N}(\mu, \sigma^2)">is given as input to the generator (the convolutional GRU) in the Prediction module.  This input is constant for every future time step. At train time it is sampled from the future distribution, while at test time from the present distribution.  
 So at train time, the future distribution sees the past and the future of video sequences. Since the data are diverse, the future distribution will naturally be multi-modal. But how can the present distribution be multimodal,  if it never sees in person the modes of the future? By forcing the present distribution to be similar to the future distribution via KL divergence. This happens in the probabilistic loss.
 
 <img src=
