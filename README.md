@@ -105,6 +105,14 @@ L_{probabilistic} = D_{KL} (F(\cdotp| Z_t, ..., Z_{t+N_f}\|P(\cdotp| Z_t))
 As you see, the present distribution is not used at train time, but it is still trained. At test time, we can sample from it and generate diverse and realistic futures.
 
 ## Data and Training
+The model is trained on 8x 2080Ti NVIDIA GPUs with frames of size 224x480 (256x512 for CItyscapes), which is a relatively high resolution. Inference runs on a single GPU in real-time. This fact has high significance in autonomous driving because it means that the method can be used in real-life applications. 
+
+The whole model besides the teacher network is trained on non-public data from the British company Wayve. Before training, the encoders of the perception model and the teacher model are pretrained as an autoencoder.  
+Except for the optical flow autoencoder, which is a PWC-Net [] pretrained off-the-shelf, the autoencoders are trained with data collected from CityScapes [14], Mapillary Vistas [48], ApolloScape [29], and Berkeley Deep Drive [67]. These data were collected during real driving scenarios and present enough realistic situations. For example, they show seasonal (winter, summer), weather (rain), lighting (day, night), and viewpoint changes. Among the covered 6 continents, in the images below you can see China on the left and the USA on the right.
+<p float="right"> <img src="images/apolloscape.gif" width="450" /> <img src="images/berkeleyDeepDrive.png" width="450" /> </p>
+ 
+In autonomous driving and in DL in general it is crucial to work with diverse and realistic data. What the network has never seen, it is unlikely to learn. Imagine, you have never seen rain in your life and it suddenly starts pouring down while you are behind the steering wheel. It may become more difficult for you to accomplish the driving task. Still, you could manage. Human’s generalization capabilities are indeed amazing, and transferring them to DL models is an open challenge.
+
 
 ## Results
 Since there are no other end-to-end methods to compare against, the authors simply substitute the Dynamics module with other other spatio-temporal architectures. They choose the convolutional GRU in [], 3D ResNet[], and the 3D inception network from []. In this way, they obtain 3 deterministic and 3 probabilistic networks against which they can compare their method.  form the evaluation their reach the following conclusions:
