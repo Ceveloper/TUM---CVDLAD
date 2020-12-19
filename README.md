@@ -23,8 +23,26 @@ Let’s take a look at the data flow and see how the network is constructed. To 
 
 <img src="images/Network_loss_circles.png" />
 
-The Perception module takes as input 5 frames of the past 1 second and encodes them into segmentation, flow, and depth information. That information is concatenated i.e. fused together for each input frame to produce the perception feature x_. 
-Those features are fed to the Dynamics module, a 3D convolutional network that contains a novel module, the Temporal Block. This module extracts in parallel local and global features. On a local level, it separates the convolutions acquiring in parallel spatial features, vertical motion, horizontal motion, and overall motion. I will not dive deeper into it, since its analysis in the paper is pretty straightforward. The Dynamics module outputs the spatio-temporal representation zt, which contains information up to present time t. 
-This representation goes into the Prediction module. Here a generator, a convolutional GRU, outputs future codes g_t for each future time step t+i, for a total of 10 timesteps. The codes are then decoded to predict segmentation, depth, and flow maps for each one of the 10 future time steps, covering a total of 2 seconds. 
-The spatio-temporal representation z_t  goes also into the Control module. This module predicts the car controls -  velocity, acceleration, steering angle, and angular velocity - for each future time step. 
+The Perception module takes as input 5 frames of the past 1 second and encodes them into segmentation, flow, and depth information. That information is concatenated i.e. fused together for each input frame to produce the perception feature <img src="https://render.githubusercontent.com/render/math?math=x_{t-i}">.  
+Those features are fed to the Dynamics module, a 3D convolutional network that contains a novel module, the Temporal Block. This module extracts in parallel local and global features. On a local level, it separates the convolutions acquiring in parallel spatial features, vertical motion, horizontal motion, and overall motion. I will not dive deeper into it, since its analysis in the paper is pretty straightforward. The Dynamics module outputs the spatio-temporal representation <img src="https://render.githubusercontent.com/render/math?math=z_{t}">, which contains information up to present time <img src="https://render.githubusercontent.com/render/math?math=t">.  
+This representation goes into the Prediction module. Here a generator, a convolutional GRU, outputs future codes <img src="https://render.githubusercontent.com/render/math?math=g_{t%2Bi}"> for each future time step <img src="https://render.githubusercontent.com/render/math?math=t%2Bi">. The codes are then decoded to predict segmentation, depth, and flow maps for each one of the 10 future time steps, covering a total of 2 seconds.  
+The spatio-temporal representation <img src="https://render.githubusercontent.com/render/math?math=z_{t}">  goes also into the Control module. This module predicts the car controls -  velocity, acceleration, steering angle, and angular velocity - for each future time step.  
 At this point, the whole method does operate in a deterministic setting (the input to the generator for each time step is the zero vector).  How to make the method probabilistic? By adding the module containing the future and present distribution, the probabilistic module. More about it in the probabilistic loss section.
+
+<img src=
+"https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cbegin%7Balign%2A%7D%0AR%28g%29+%26%3D+%5Cfrac%7B1%7D%7Bn%7D+%5Csum_%7Bi%3D1%7D%5E%7Bn%7D+%5Cell%28y_i%2Cg%28x_i%29%29%5C%5C%0A%26%3D%5Cfrac%7B1%7D%7B2n%7D+%28%5Cmathbf%7BX%7D%5Cboldsymbol%7Bw%7D-%5Cmathbf%7By%7D%29%5ET+%28%5Cmathbf%7BX%7D%5Cboldsymbol%7Bw%7D-%5Cmathbf%7By%7D%29%0A%5Cend%7Balign%2A%7D%0A" 
+alt="\begin{align*}
+R(g) &= \frac{1}{n} \sum_{i=1}^{n} \ell(y_i,g(x_i))\\
+&=\frac{1}{2n} (\mathbf{X}\boldsymbol{w}-\mathbf{y})^T (\mathbf{X}\boldsymbol{w}-\mathbf{y})
+\end{align*}
+">
+
+![](https://render.githubusercontent.com/render/math?math=e^{i %2B\pi} =x%2B1)
+
+<img src="https://render.githubusercontent.com/render/math?math=e^{i %2B\pi} =x%2B1">
+
+![\begin{align*}
+R(g) &= \frac{1}{n} \sum_{i=1}^{n} \ell(y_i,g(x_i))\\
+&=\frac{1}{2n} (\mathbf{X}\boldsymbol{w}-\mathbf{y})^T (\mathbf{X}\boldsymbol{w}-\mathbf{y})
+\end{align*}
+](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cbegin%7Balign%2A%7D%0AR%28g%29+%26%3D+%5Cfrac%7B1%7D%7Bn%7D+%5Csum_%7Bi%3D1%7D%5E%7Bn%7D+%5Cell%28y_i%2Cg%28x_i%29%29%5C%5C%0A%26%3D%5Cfrac%7B1%7D%7B2n%7D+%28%5Cmathbf%7BX%7D%5Cboldsymbol%7Bw%7D-%5Cmathbf%7By%7D%29%5ET+%28%5Cmathbf%7BX%7D%5Cboldsymbol%7Bw%7D-%5Cmathbf%7By%7D%29%0A%5Cend%7Balign%2A%7D%0A)
