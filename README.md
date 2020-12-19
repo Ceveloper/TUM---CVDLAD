@@ -79,6 +79,7 @@ alt="\begin{align*}
 KL(q\|p)= E_q \left[log{\frac{q(Z)}{p(Z|x)} } \right]
 \end{align*}
 ">
+
 Easy, right?
 
 The authors define two distributions:
