@@ -147,9 +147,14 @@ The generated futures show our car waiting, slowing down, turning right, or turn
 
 ## References
 <a id="1">[1]</a> 
-Dijkstra, E. W. (1968). 
-Go to statement considered harmful. 
-Communications of the ACM, 11(3), 147-148.
+Hu A., Cotter, F., Mohan, N., Gurau, C., Kendall, A.: Probabilistic Future Prediction for Video Scene Understanding. ECCV 2020. [arxiv] (https://arxiv.org/abs/2003.06409)
 
-<a id="1">[2]</a> 
-Kendall, A., Gal, Y., Cipolla, R.: Multi-task learning using uncertainty to weigh losses for scene geometry and semantics. In: Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR) (2018)
+
+<a id="2">[2]</a> 
+Kendall, A., Gal, Y., Cipolla, R.: Multi-task learning using uncertainty to weigh losses for scene geometry and semantics. CVPR 2018. [arxiv](https://arxiv.org/abs/1705.07115)
+
+<a id="3">[3]</a> 
+Sun, D., Yang, X., Liu, M.Y., Kautz, J.: PWC-Net: CNNs for Optical Flow Using Pyramid, Warping, and Cost Volume. CVPR 2018. [arxiv] (https://arxiv.org/abs/1709.02371)
+Sun, D., Yang, X., Liu, M.Y., Kautz, J.: Models matter, so does training: An empirical study of CNNs for optical flow estimation. 2018 [arxiv] (https://arxiv.org/abs/1809.05571)
+[Here](https://www.youtube.com/watch?v=vVU8XV0Ac_0) a good presentation on youtube link. 
+
