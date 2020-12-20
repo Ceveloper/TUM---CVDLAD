@@ -43,7 +43,7 @@ L &= \lambda_{fp} L_{future\_pred} +\lambda_{c} L_{control} + \lambda_{p} L_{pro
 
 ### The prediction loss. 
 First, where does the ground truth come from? From a teacher model. The encoders in the perception module are originally from two well-known autoencoder architectures ([[2]](#2) for segmentation and depth, PWC-Net[[3]](#3) for optical flow). Those autoencoders are pretrained jointly and then separated. While the encoders end up making part of the Perception module, the Decoders are used as a teacher module. The teacher takes the perception features of future frames and decodes them providing a pseudo ground-truth (note that these are other decoders as the ones in the prediction module).  
-For each one of the future time steps <img src="https://render.githubusercontent.com/render/math?math=N_f">, the predicted maps are compared to the output of a teacher model. For segmentation, via cross-entropy bootstrapping loss[] <img src="https://render.githubusercontent.com/render/math?math=L_{segm}">,  for depth via scale-invariant depth loss[] <img src="https://render.githubusercontent.com/render/math?math=L_{depth}">,  and for optical flow via the Huber loss <img src="https://render.githubusercontent.com/render/math?math=L_{flow}">. 
+For each one of the future time steps <img src="https://render.githubusercontent.com/render/math?math=N_f">, the predicted maps are compared to the output of a teacher model. For segmentation, via cross-entropy bootstrapping loss[[4]](#4) <img src="https://render.githubusercontent.com/render/math?math=L_{segm}">,  for depth via scale-invariant depth loss[[5]](#5) <img src="https://render.githubusercontent.com/render/math?math=L_{depth}">,  and for optical flow via the Huber loss <img src="https://render.githubusercontent.com/render/math?math=L_{flow}">. 
 
 <img src=
 "https://render.githubusercontent.com/render/math?math=%5CLarge+%5Cdisplaystyle+%5Cbegin%7Balign%2A%7D%0AL_%7Bfuture_pred%7D+%26%3D+%5Clambda_%7Bs%7D+%5Csum_%7Bi%3D0%7D%5E%7BN_f+-1%7D+%5Cgamma%5Ei+L_%7Bsegm%7D%5E%7Bt%2Bi%7D+%2B+%5Clambda_%7Bd%7D+%5Csum_%7Bi%3D0%7D%5E%7BN_f+-1%7D+%5Cgamma%5Ei+L_%7Bdepth%7D%5E%7Bt%2Bi%7D+%2B+%5Clambda_%7Bf%7D+%5Csum_%7Bi%3D0%7D%5E%7BN_f+-1%7D+%5Cgamma%5Ei+L_%7Bflow%7D%5E%7Bt%2Bi%7D+%0A%5Cend%7Balign%2A%7D%0A" 
@@ -108,7 +108,7 @@ As you see, the present distribution is not used at train time, but it is still 
 The model is trained on 8x 2080Ti NVIDIA GPUs with frames of size 224x480 (256x512 for CItyscapes), which is a relatively high resolution. Inference runs on a single GPU in real-time. This fact has high significance in autonomous driving because it means that the method can be used in real-life applications. 
 
 The whole model besides the teacher network is trained on non-public data from the British company Wayve. Before training, the encoders of the perception model and the teacher model are pretrained as an autoencoder.  
-Except for the optical flow autoencoder, which is a PWC-Net [] pretrained off-the-shelf, the autoencoders are trained with data collected from CityScapes [14], Mapillary Vistas [48], ApolloScape [29], and Berkeley Deep Drive [67]. These data were collected during real driving scenarios and present enough realistic situations. For example, they show seasonal (winter, summer), weather (rain), lighting (day, night), and viewpoint changes. Among the covered 6 continents, in the images below you can see China on the left and the USA on the right.
+Except for the optical flow autoencoder, which is a PWC-Net[[3]](#3) pretrained off-the-shelf, the autoencoders are trained with data collected from CityScapes[[6]](#6), Mapillary Vistas[[7]](#7), ApolloScape[[8]](#8), and Berkeley Deep Drive[[9]](#9). These data were collected during real driving scenarios and present enough realistic situations. For example, they show seasonal (winter, summer), weather (rain), lighting (day, night), and viewpoint changes. Among the covered 6 continents, in the images below you can see China on the left and the USA on the right.
 <p float="right"> <img src="images/apolloscape.gif" width="450" /> <img src="images/berkeleyDeepDrive.png" width="450" /> </p>
  
 In autonomous driving and in DL in general it is crucial to work with diverse and realistic data. What the network has never seen, it is unlikely to learn. Imagine, you have never seen rain in your life and it suddenly starts pouring down while you are behind the steering wheel. It may become more difficult for you to accomplish the driving task. Still, you could manage. Human’s generalization capabilities are indeed amazing, and transferring them to DL models is an open challenge.
@@ -147,14 +147,30 @@ The generated futures show our car waiting, slowing down, turning right, or turn
 
 ## References
 <a id="1">[1]</a> 
-Hu A., Cotter, F., Mohan, N., Gurau, C., Kendall, A.: Probabilistic Future Prediction for Video Scene Understanding. ECCV 2020. [arxiv] (https://arxiv.org/abs/2003.06409)
+Hu A., Cotter, F., Mohan, N., Gurau, C., Kendall, A.: Probabilistic Future Prediction for Video Scene Understanding. ECCV 2020. [arXiv](https://arxiv.org/abs/2003.06409)
 
 
 <a id="2">[2]</a> 
-Kendall, A., Gal, Y., Cipolla, R.: Multi-task learning using uncertainty to weigh losses for scene geometry and semantics. CVPR 2018. [arxiv](https://arxiv.org/abs/1705.07115)
+Kendall, A., Gal, Y., Cipolla, R.: Multi-task learning using uncertainty to weigh losses for scene geometry and semantics. CVPR 2018. [arXiv](https://arxiv.org/abs/1705.07115)
 
 <a id="3">[3]</a> 
-Sun, D., Yang, X., Liu, M.Y., Kautz, J.: PWC-Net: CNNs for Optical Flow Using Pyramid, Warping, and Cost Volume. CVPR 2018. [arxiv] (https://arxiv.org/abs/1709.02371)
-Sun, D., Yang, X., Liu, M.Y., Kautz, J.: Models matter, so does training: An empirical study of CNNs for optical flow estimation. 2018 [arxiv] (https://arxiv.org/abs/1809.05571)
+Sun, D., Yang, X., Liu, M.Y., Kautz, J.: PWC-Net: CNNs for Optical Flow Using Pyramid, Warping, and Cost Volume. CVPR 2018. [arXiv](https://arxiv.org/abs/1709.02371)  
+Sun, D., Yang, X., Liu, M.Y., Kautz, J.: Models matter, so does training: An empirical study of CNNs for optical flow estimation. 2018 [arXiv](https://arxiv.org/abs/1809.05571)  
 [Here](https://www.youtube.com/watch?v=vVU8XV0Ac_0) a good presentation on youtube link. 
+
+<a id="4">[4]</a> 
+Wu, Z., Shen, C., van den Hengel, A.: Bridging category-level and instance-level semantic image segmentation. [arXiv](https://arxiv.org/abs/1605.06885) preprint (2016)
+
+<a id="5">[5]</a> 
+Li, Z., Snavely, N.: MegaDepth: Learning Single-View Depth Prediction from Internet Photos. CVPR 2018. [arXiv](https://arxiv.org/abs/1804.00607)
+
+<a id="6">[6]</a> 
+Cordts, M., Omran, M., Ramos, S., Rehfeld, T., Enzweiler, M., Benenson, R., Franke, U., Roth, S., Schiele, B.: The cityscapes dataset for semantic urban scene understanding. CVPR 2016. [arXiv](https://arxiv.org/abs/1604.01685)
+<a id="7">[7]</a> 
+Neuhold, G., Ollmann, T., Bulo, S.R., Kontschieder, P.: The Mapillary Vistas Dataset for Semantic Understanding of Street Scenes. ICCV 2017. [research.mapillary.com](https://research.mapillary.com/)
+<a id="8">[8]</a> 
+Huang, X., Cheng, X., Geng, Q., Cao, B., Zhou, D., Wang, P., Lin, Y., Yang, R.: The apolloscape dataset for autonomous driving. CVPRw 2018. [http://apolloscape.auto](http://apolloscape.auto/)
+
+<a id="9">[9]</a> 
+Yu, F., Xian, W., Chen, Y., Liu, F., Liao, M., Madhavan, V., Darrell, T.: Bdd100k: A diverse driving video database with scalable annotation tooling. ICCVw 2018. [arXiv](https://arxiv.org/abs/1805.04687)
 
