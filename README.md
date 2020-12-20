@@ -1,5 +1,5 @@
 # Probabilistic Future Prediction for Video Scene Understanding
-This EECV 2020 paper proposes a novel deep learning method for autonomous driving. This method controls a car and predicts the future only from video data. What does future prediction have to do with autonomous driving? Well, a lot.
+This EECV 2020 paper[[1]](#1) proposes a novel deep learning method for autonomous driving. This method controls a car and predicts the future only from video data. What does future prediction have to do with autonomous driving? Well, a lot.
  
 Being able to predict possible scenarios does indeed help while driving, right? Predicting the future is one of the greatest capabilities of humans. While driving it helps you decide when to slow down, accelerate, or break. At an intersection, you know that another car may come from the left, or someone may cross the street. The car and the pedestrian could also interact with each other (*Multi-Agent interaction*). What will happen is not completely certain: there is no **one future** but there are **many** possible **futures**. This is why the authors handle this problem not as deterministic, but as probabilistic.
 
@@ -42,7 +42,7 @@ L &= \lambda_{fp} L_{future\_pred} +\lambda_{c} L_{control} + \lambda_{p} L_{pro
 ">
 
 ### The prediction loss. 
-First, where does the ground truth come from? From a teacher model. The encoders in the perception module are originally from two well-known autoencoder architectures ([] for segmentation and depth, [] for optical flow). Those autoencoders are pretrained jointly and then separated. While the encoders end up making part of the Perception module, the Decoders are used as a teacher module. The teacher takes the perception features of future frames and decodes them providing a pseudo ground-truth (note that these are other decoders as the ones in the prediction module).  
+First, where does the ground truth come from? From a teacher model. The encoders in the perception module are originally from two well-known autoencoder architectures ([[2]](#2) for segmentation and depth, PWC-Net[[3]](#3) for optical flow). Those autoencoders are pretrained jointly and then separated. While the encoders end up making part of the Perception module, the Decoders are used as a teacher module. The teacher takes the perception features of future frames and decodes them providing a pseudo ground-truth (note that these are other decoders as the ones in the prediction module).  
 For each one of the future time steps <img src="https://render.githubusercontent.com/render/math?math=N_f">, the predicted maps are compared to the output of a teacher model. For segmentation, via cross-entropy bootstrapping loss[] <img src="https://render.githubusercontent.com/render/math?math=L_{segm}">,  for depth via scale-invariant depth loss[] <img src="https://render.githubusercontent.com/render/math?math=L_{depth}">,  and for optical flow via the Huber loss <img src="https://render.githubusercontent.com/render/math?math=L_{flow}">. 
 
 <img src=
@@ -142,3 +142,14 @@ This example shows a crosswalk at a red light. Some people cross the street from
 Here we are at an intersection, with another vehicle and a bus coming from the opposite direction.
 ![](https://cdn.sanity.io/images/rmgve84j/production/66625d679d021aaf943d78e4b082768da9fc1afc-2195x1026.gif?w=1920&h=897&fit=crop)
 The generated futures show our car waiting, slowing down, turning right, or turning left. Take a look at the future segmentation of the right turn. Here the method seems to fail. Did you notice? The bus almost disappears, instead of continuing straight or turning right. Since our car is also turning right, here it is particularly important to understand how the bus will move. As I mentioned before, 2 seconds in the future is pretty far. If it was a real driving scenario, the network may have corrected itself. Seeing what the bus does after 0.5 seconds would have improved the prediction of the future 1.5 seconds.
+
+
+
+## References
+<a id="1">[1]</a> 
+Dijkstra, E. W. (1968). 
+Go to statement considered harmful. 
+Communications of the ACM, 11(3), 147-148.
+
+<a id="1">[2]</a> 
+Kendall, A., Gal, Y., Cipolla, R.: Multi-task learning using uncertainty to weigh losses for scene geometry and semantics. In: Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR) (2018)
