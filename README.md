@@ -147,30 +147,23 @@ The generated futures show our car waiting, slowing down, turning right, or turn
 
 ## References
 <a id="1">[1]</a> 
-Hu A., Cotter, F., Mohan, N., Gurau, C., Kendall, A.: Probabilistic Future Prediction for Video Scene Understanding. ECCV 2020. [arXiv](https://arxiv.org/abs/2003.06409)
-
-
+Hu A., Cotter, F., Mohan, N., Gurau, C., Kendall, A.: Probabilistic Future Prediction for Video Scene Understanding. ECCV 2020. [arXiv](https://arxiv.org/abs/2003.06409)  
 <a id="2">[2]</a> 
-Kendall, A., Gal, Y., Cipolla, R.: Multi-task learning using uncertainty to weigh losses for scene geometry and semantics. CVPR 2018. [arXiv](https://arxiv.org/abs/1705.07115)
-
+Kendall, A., Gal, Y., Cipolla, R.: Multi-task learning using uncertainty to weigh losses for scene geometry and semantics. CVPR 2018. [arXiv](https://arxiv.org/abs/1705.07115)  
 <a id="3">[3]</a> 
 Sun, D., Yang, X., Liu, M.Y., Kautz, J.: PWC-Net: CNNs for Optical Flow Using Pyramid, Warping, and Cost Volume. CVPR 2018. [arXiv](https://arxiv.org/abs/1709.02371)  
 Sun, D., Yang, X., Liu, M.Y., Kautz, J.: Models matter, so does training: An empirical study of CNNs for optical flow estimation. 2018 [arXiv](https://arxiv.org/abs/1809.05571)  
-[Here](https://www.youtube.com/watch?v=vVU8XV0Ac_0) a good presentation on youtube link. 
-
+[Here](https://www.youtube.com/watch?v=vVU8XV0Ac_0) a good presentation on youtube.  
 <a id="4">[4]</a> 
-Wu, Z., Shen, C., van den Hengel, A.: Bridging category-level and instance-level semantic image segmentation. [arXiv](https://arxiv.org/abs/1605.06885) preprint (2016)
-
+Wu, Z., Shen, C., van den Hengel, A.: Bridging category-level and instance-level semantic image segmentation. [arXiv](https://arxiv.org/abs/1605.06885) preprint 2016.  
 <a id="5">[5]</a> 
-Li, Z., Snavely, N.: MegaDepth: Learning Single-View Depth Prediction from Internet Photos. CVPR 2018. [arXiv](https://arxiv.org/abs/1804.00607)
-
+Li, Z., Snavely, N.: MegaDepth: Learning Single-View Depth Prediction from Internet Photos. CVPR 2018. [arXiv](https://arxiv.org/abs/1804.00607)  
 <a id="6">[6]</a> 
-Cordts, M., Omran, M., Ramos, S., Rehfeld, T., Enzweiler, M., Benenson, R., Franke, U., Roth, S., Schiele, B.: The cityscapes dataset for semantic urban scene understanding. CVPR 2016. [arXiv](https://arxiv.org/abs/1604.01685)
+Cordts, M., Omran, M., Ramos, S., Rehfeld, T., Enzweiler, M., Benenson, R., Franke, U., Roth, S., Schiele, B.: The cityscapes dataset for semantic urban scene understanding. CVPR 2016. [arXiv](https://arxiv.org/abs/1604.01685)  
 <a id="7">[7]</a> 
-Neuhold, G., Ollmann, T., Bulo, S.R., Kontschieder, P.: The Mapillary Vistas Dataset for Semantic Understanding of Street Scenes. ICCV 2017. [research.mapillary.com](https://research.mapillary.com/)
+Neuhold, G., Ollmann, T., Bulo, S.R., Kontschieder, P.: The Mapillary Vistas Dataset for Semantic Understanding of Street Scenes. ICCV 2017. [research.mapillary.com](https://research.mapillary.com/)  
 <a id="8">[8]</a> 
-Huang, X., Cheng, X., Geng, Q., Cao, B., Zhou, D., Wang, P., Lin, Y., Yang, R.: The apolloscape dataset for autonomous driving. CVPRw 2018. [http://apolloscape.auto](http://apolloscape.auto/)
-
+Huang, X., Cheng, X., Geng, Q., Cao, B., Zhou, D., Wang, P., Lin, Y., Yang, R.: The apolloscape dataset for autonomous driving. CVPRw 2018. [http://apolloscape.auto](http://apolloscape.auto/)  
 <a id="9">[9]</a> 
-Yu, F., Xian, W., Chen, Y., Liu, F., Liao, M., Madhavan, V., Darrell, T.: Bdd100k: A diverse driving video database with scalable annotation tooling. ICCVw 2018. [arXiv](https://arxiv.org/abs/1805.04687)
+Yu, F., Xian, W., Chen, Y., Liu, F., Liao, M., Madhavan, V., Darrell, T.: Bdd100k: A diverse driving video database with scalable annotation tooling. ICCVw 2018. [arXiv](https://arxiv.org/abs/1805.04687)  
 
