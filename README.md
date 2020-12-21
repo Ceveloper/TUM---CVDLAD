@@ -105,7 +105,7 @@ L_{probabilistic} = D_{KL} (F(\cdotp| Z_t, ..., Z_{t+N_f}\|P(\cdotp| Z_t))
 As you see, the present distribution is not used at train time, but it is still trained. At test time, we can sample from it and generate diverse and realistic futures.
 
 ## Data and Training
-The model is trained on 8x 2080Ti NVIDIA GPUs with frames of size 224x480 (256x512 for CItyscapes), which is a relatively high resolution. Inference runs on a single GPU in real-time. This fact has high significance in autonomous driving because it means that the method can be used in real-life applications. 
+The model is trained on 8 2080Ti NVIDIA GPUs with frames of size 224x480 (256x512 for CItyscapes), which is a relatively high resolution. Inference runs on a single GPU in real-time. This fact has high significance in autonomous driving because it means that the method can be used in real-life applications. 
 
 The whole model besides the teacher network is trained on non-public data from the British company Wayve. Before training, the encoders of the perception model and the teacher model are pretrained as an autoencoder.  
 Except for the optical flow autoencoder, which is a PWC-Net[[3]](#3) pretrained off-the-shelf, the autoencoders are trained with data collected from CityScapes[[6]](#6), Mapillary Vistas[[7]](#7), ApolloScape[[8]](#8), and Berkeley Deep Drive[[9]](#9). These data were collected during real driving scenarios and present enough realistic situations. For example, they show seasonal (winter, summer), weather (rain), lighting (day, night), and viewpoint changes. Among the covered 6 continents, in the images below you can see China on the left and the USA on the right.
@@ -115,7 +115,7 @@ In autonomous driving and in DL in general it is crucial to work with diverse an
 
 
 ## Results
-Since there are no other end-to-end methods to compare against, the authors simply substitute the Dynamics module with other other spatio-temporal architectures. They choose the convolutional GRU in [], 3D ResNet[], and the 3D inception network from []. In this way, they obtain 3 deterministic and 3 probabilistic networks against which they can compare their method.  form the evaluation their reach the following conclusions:
+Since there are no other end-to-end methods to compare against, the authors simply substitute the Dynamics module with other other spatio-temporal architectures. They choose the convolutional GRU in [[10]](#10), 3D ResNet[[11]](#11), and the 3D inception network from [[12]](#12). In this way, they obtain 3 deterministic and 3 probabilistic networks against which they can compare their method.  From the evaluation their reach the following conclusions:
  * Their method achieves the best performance in both the deterministic and the probabilistic case, according to the unified perception metric.  This motivates both the probabilistic module and the temporal block. They are the reasons for the performance improvement.
  
  *  The probabilistic approach improves the performance of every method
@@ -166,4 +166,10 @@ Neuhold, G., Ollmann, T., Bulo, S.R., Kontschieder, P.: The Mapillary Vistas Dat
 Huang, X., Cheng, X., Geng, Q., Cao, B., Zhou, D., Wang, P., Lin, Y., Yang, R.: The apolloscape dataset for autonomous driving. CVPRw 2018. [http://apolloscape.auto](http://apolloscape.auto/)  
 <a id="9">[9]</a> 
 Yu, F., Xian, W., Chen, Y., Liu, F., Liao, M., Madhavan, V., Darrell, T.: Bdd100k: A diverse driving video database with scalable annotation tooling. ICCVw 2018. [arXiv](https://arxiv.org/abs/1805.04687)  
+<a id="10">[10]</a>
+Ballas, N., Yao, L., Pas, C., Courville, A.: Delving deeper into convolutional networks for learning video representations. ICLR 2016. [arXiv](https://arxiv.org/abs/1511.06432)  
+<a id="11">[11]</a>
+Hara, K., Kataoka, H., Satoh, Y.: Learning spatio-temporal features with 3d residual networks for action recognition. ICCVw 2017. [arXiv](https://arxiv.org/abs/1708.07632)  
+<a id="12">[12]</a>
+Xie, S., Sun, C., Huang, J., Tu, Z., Murphy, K.: Rethinking spatiotemporal feature learning for video understanding. ECCV 2018. [arXiv](https://arxiv.org/abs/1712.04851)  
 
