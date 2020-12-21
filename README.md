@@ -104,30 +104,35 @@ L_{probabilistic} = D_{KL} (F(\cdotp| Z_t, ..., Z_{t+N_f}\|P(\cdotp| Z_t))
  
 As you see, the present distribution is not used at train time, but it is still trained. At test time, we can sample from it and generate diverse and realistic futures.
 
-## Data and Training
-The model is trained on 8 2080Ti NVIDIA GPUs with frames of size 224x480 (256x512 for CItyscapes), which is a relatively high resolution. Inference runs on a single GPU in real-time. This fact has high significance in autonomous driving because it means that the method can be used in real-life applications. 
-
-The whole model besides the teacher network is trained on non-public data from the British company Wayve. Before training, the encoders of the perception model and the teacher model are pretrained as an autoencoder.  
-Except for the optical flow autoencoder, which is a PWC-Net[[3]](#3) pretrained off-the-shelf, the autoencoders are trained with data collected from CityScapes[[6]](#6), Mapillary Vistas[[7]](#7), ApolloScape[[8]](#8), and Berkeley Deep Drive[[9]](#9). These data were collected during real driving scenarios and present enough realistic situations. For example, they show seasonal (winter, summer), weather (rain), lighting (day, night), and viewpoint changes. Among the covered 6 continents, in the images below you can see China on the left and the USA on the right.
-<p float="right"> <img src="images/apolloscape.gif" width="450" /> <img src="images/berkeleyDeepDrive.png" width="450" /> </p>
- 
-In autonomous driving and in DL in general it is crucial to work with diverse and realistic data. What the network has never seen, it is unlikely to learn. Imagine, you have never seen rain in your life and it suddenly starts pouring down while you are behind the steering wheel. It may become more difficult for you to accomplish the driving task. Still, you could manage. Human’s generalization capabilities are indeed amazing, and transferring them to DL models is an open challenge.
-
+### Training
+There are two training phases. The first one is a pretraining phase. Here the encoders of the perception model and the teacher model are pretrained as an autoencoder, except for the optical flow autoencoder. This flow autoencoder is a PWC-Net[[3]](#3) taken off-the-shelf as from the authors. The second training phase trains the whole model besides the teacher network.
 
 ## Results
-Since there are no other end-to-end methods to compare against, the authors simply substitute the Dynamics module with other other spatio-temporal architectures. They choose the convolutional GRU in [[10]](#10), 3D ResNet[[11]](#11), and the 3D inception network from [[12]](#12). In this way, they obtain 3 deterministic and 3 probabilistic networks against which they can compare their method.  From the evaluation their reach the following conclusions:
+### Data
+To teach the model how to drive we need a big amount of data. These data were collected during real driving scenarios and present enough realistic situations. In the first phase, the method is trained with frames from well-known datasets: CityScapes[[6]](#6), Mapillary Vistas[[7]](#7), ApolloScape[[8]](#8), and Berkeley Deep Drive[[9]](#9). These reflect realistic scenarios by including challenging situations. For example, different seasons (winter, summer), weather conditions (rainy, sunny, cloudy), viewpoint and lighting (day, night) changes. Among the covered 6 continents, in the images below you can see China on the left and the USA on the right.
+<p float="right"> <img src="images/apolloscape.gif" width="450" /> <img src="images/berkeleyDeepDrive.png" width="450" /> </p>
+In the second phase, the model is trained with non-public data from the British company Wayve, that collaborated in the publication. Since the data are not publicly available, it is difficult to reason about their nature. Still, since the data were collected during real driving scenarios in London, it is likely they show the same qualities as the data I described previously. Here an example from the [Wayve blog]((https://wayve.ai/blog/predicting-the-future).
+<img src="https://cdn.sanity.io/images/rmgve84j/production/466854ca175cb81ee8d3ec825ff448576a2429ff-480x224.gif" />
+
+In autonomous driving and in DL in general it is crucial to work with diverse and realistic data. What the network has never seen, it is unlikely to learn. Imagine, you have never seen rain in your life and it suddenly starts pouring down while you are behind the steering wheel. It may become more difficult for you to accomplish the driving task. Still, you could manage. Human’s generalization capabilities are indeed amazing, and transferring them to DL models is an open challenge.
+
+The model is trained on 8 2080Ti NVIDIA GPUs with frames of size 224x480 (256x512 for Cityscapes), which is a relatively high resolution. Inference runs on a single GPU in real-time. This fact has high significance in autonomous driving because it means that the method can be used in real-life applications. Do you need a car that takes 2 hours to predict what the pedestrian at the crossing will do? No. After 2 hours the pedestrian is long gone. 
+
+### What can this model?
+Since there are no other end-to-end methods to compare against, the authors simply substitute a part of their network, the one responsible for capturing spatio-temporal connections (the Dynamics module), with other architectures. They choose the convolutional GRU in [[10]](#10), 3D ResNet[[11]](#11), and the 3D inception network from [[12]](#12). In this way, they obtain 3 deterministic and 3 probabilistic networks against which they can compare their method.  From the evaluation their reach the following conclusions:
  * Their method achieves the best performance in both the deterministic and the probabilistic case, according to the unified perception metric.  This motivates both the probabilistic module and the temporal block. They are the reasons for the performance improvement.
  
  *  The probabilistic approach improves the performance of every method
  
  * Their method generates the most accurate and diverse futures (see the diversity distance metric DDM).
  
-This kind of evaluation is a bit restrictive. So to compare with a broader scientific community they also evaluate their method on future semantic segmentation with the Cityscapes dataset. Cityscapes is not as challenging as the previous data collection because it does not present bad weather or night conditions. It is entirely collected in Germany. Here some considerations from their comparison against Navabi[5] and Chiu[6].
+This kind of evaluation is a bit restrictive. How can other scientiSo to compare with a broader scientific community they also evaluate their method on future semantic segmentation with the Cityscapes dataset. Cityscapes is not as challenging as the previous data collection because it does not present bad weather or night conditions. It is entirely collected in Germany. Here some considerations from their comparison against Navabi[5] and Chiu[6].
  * This method achieves the best performance.
  * The future is predicted for 5 and 10 steps in the future, covering respectively 0.29s and 0.59s. This is a relatively high value. Navabi[5] and Chiu[6] were presented for 3 or 4 steps.
  * This method achieves a score of 0.464 mean IoU for 5 steps prediction. The state of the art on Cityscapes for present semantic segmentation is around 0.85 mIoU[4], almost double as much. As you can see, the problem of future semantic segmentation has not been solved yet and is more challenging than the present case. 
 
 Let’s now take a look at some qualitative examples taken from the [blog article](https://wayve.ai/blog/predicting-the-future) on the Wayve website.
+
 #### Traffic Line
 Here our car waits in a line by a traffic light. Sampling from the present distribution generates two futures.
  ![](https://cdn.sanity.io/images/rmgve84j/production/1e97a7b6ff2bb02042d2c8722f4cc9a65a2c2c98-2500x889.gif?w=1920&h=683&fit=crop)
