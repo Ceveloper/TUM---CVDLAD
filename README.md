@@ -156,9 +156,9 @@ To conclude, this method addresses unresolved issues in autonomous driving and i
 On top of that, it is also the first method to jointly predict semantic segmentation, depth, and optical flow (do you remember? We have seen those concepts at the beginning). Overall, it seems to correctly represent the surrounding scene, the motion of our car, and the dynamics of the other agents as well as their interactions (multi-agent interaction). There is of course room for improvement as we have seen in the example gifs.  
 
 So in this framework, there is all we need to drive a car. Or not? Let’s summarize. What do you need to drive a car?
- 1. You need to understand what’s happening around you. In other words, you need to elaborate your *perception* of the environment into something that tells you how the rest of the world is moving (spatio-temporal representation).
- 2. Then, you need to guess how the other vehicles or pedestrians will behave, to be ready to react. So you need to *predict* possible futures.
- 3. Last, you turn your wheel the car, push on the gas or the brake accordingly. You *control* your car.  
+ 1. You need to understand what’s happening around you. In other words, you need to elaborate your **perception** of the environment into something that tells you how the rest of the world is moving (spatio-temporal representation).
+ 2. Then, you need to guess how the other vehicles or pedestrians will behave, to be ready to react. So you need to **predict** possible futures.
+ 3. Last, you turn your wheel the car, push on the gas or the brake accordingly. You **control** your car.  
  
 Now, what is missing? 
 Let’s go back to the gif prediction at an intersection with a bus. There the possible futures showed our car waiting, slowing down,  turning left or right. Well, isn’t it strange to predict where our car will go? I can't speak for you, but when I drive it is usually because I want to get somewhere. I know that I want to turn left.  
