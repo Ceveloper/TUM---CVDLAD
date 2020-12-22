@@ -161,7 +161,8 @@ So in this framework, there is all we need to drive a car. Or not? Let’s summa
  3. Last, you turn your wheel the car, push on the gas or the brake accordingly. You *control* your car.  
  
 Now, what is missing? 
-Let’s go back to the gif prediction at an intersection with a bus. There the possible futures showed our car waiting, slowing down,  turning left or right. Well, isn’t it strange to predict where our car will go? I do not know about you, but when I drive it is usually because I want to get somewhere. I know that I want to turn left. What is missing in this pipeline is the *planning* part. Planning how or through which path we can reach a given destination. 
+Let’s go back to the gif prediction at an intersection with a bus. There the possible futures showed our car waiting, slowing down,  turning left or right. Well, isn’t it strange to predict where our car will go? I can't speak for you, but when I drive it is usually because I want to get somewhere. I know that I want to turn left.  
+What is missing in this pipeline is the *planning* part. Planning how or through which path we can reach a given destination. 
 Planning is a complex task that the scientific community has investigated for years with very good achievements. The future where vehicles will drive autonomously is near! But this is a topic for another time. 
 
 ## References
