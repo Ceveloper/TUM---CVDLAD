@@ -16,7 +16,7 @@ First, let’s reason about the method in terms of input and output. The input i
 * How far from us is each object, hereby estimating its *depth* (lower left).
 * from where to where each object did move with respect to the previous frame.  In other words,  estimate the movement or flow of certain particles in the image. This is called *optical flow* (lower right). 
 
-You can read this article without problems after this short introduction. But if you are not familiar with these three concepts, you can inform yourself  - there are many great blogs out there.
+But if you are not familiar with these three concepts, you can inform yourself  - there are many great blogs out there. But you can keep on reading this article just fine after this short introduction. If are not a Deep Learning scientist or are not craving for math, just skip the sections [Network](##Network) and [Losses](##Losses) and directly continue in [Results](##Results).
 
 ## Network
 Let’s take a look at the data flow and see how the network is constructed. To allow a good grasp of the gradient flow, the red squares in the images show the variables involved in the loss computation.
