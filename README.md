@@ -165,7 +165,7 @@ Now, what is missing?
 Let’s go back to the gif prediction at an intersection with a bus. Or better, to a similar one. 
  ![](https://cdn.sanity.io/images/rmgve84j/production/9c96b3c4f6b5b6c80b2af732a6858635a4d63754-1955x478.gif?w=1920&h=469&fit=crop)  
  Also here the possible futures show our car waiting, slowing down,  turning left or right. Well, isn’t it strange to predict where our car will go? I can't speak for you, but when I drive it is usually because I want to get somewhere. I know that I want to turn left.  
-What is missing in this pipeline is the *planning* part. Planning how or through which path we can reach a given destination. 
+What is missing in this pipeline is the **planning** part. Planning how or through which path we can reach a given destination. 
 Planning is a complex task that the scientific community has investigated for years with very good achievements. The future where vehicles will drive autonomously is near! But this is a topic for another time. 
 
 ## References
