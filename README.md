@@ -111,7 +111,8 @@ There are two training phases. The first one is a pretraining phase. Here the en
 ### Data
 To teach the model how to drive we need a big amount of data. These data were collected during real driving scenarios and present enough realistic situations. In the first phase, the method is trained with frames from well-known datasets: CityScapes[[6]](#6), Mapillary Vistas[[7]](#7), ApolloScape[[8]](#8), and Berkeley Deep Drive[[9]](#9). These reflect realistic scenarios by including challenging situations. For example, different seasons (winter, summer), weather conditions (rainy, sunny, cloudy), viewpoint and lighting (day, night) changes. Among the covered 6 continents, in the images below you can see China on the left and the USA on the right.
 <p float="right"> <img src="images/apolloscape.gif" width="450" /> <img src="images/berkeleyDeepDrive.png" width="450" /> </p>
-In the second phase, the model is trained with non-public data from the British company Wayve, that collaborated in the publication. Since the data are not publicly available, it is difficult to reason about their nature. Still, since the data were collected during real driving scenarios in London, it is likely they show the same qualities as the data I described previously. Here an example from the [blog article](https://wayve.ai/blog/predicting-the-future) on the Wayve website.
+In the second phase, the model is trained with non-public data from the British company Wayve, that collaborated in the publication. Since the data are not publicly available, it is difficult to reason about their nature. Still, since the data were collected during real driving scenarios in London, it is likely they show the same qualities as the data I described previously. 
+Here an example from the [blog article](https://wayve.ai/blog/predicting-the-future) on the Wayve website.
 
 <img src="https://cdn.sanity.io/images/rmgve84j/production/466854ca175cb81ee8d3ec825ff448576a2429ff-480x224.gif" />
 
