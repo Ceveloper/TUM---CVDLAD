@@ -92,7 +92,7 @@ Both distributions are 8-dimensional, diagonal Gaussian distributions. Here,  8 
 
 <img src="images/Probabilistic_prediction_modules.png" width="550"/>
 
-A sample from the distribution <img src="https://render.githubusercontent.com/render/math?math=\eta ~ \mathcal{N}(\mu, \sigma^2)">is given as input to the generator (the convolutional GRU) in the Prediction module.  This input is constant for every future time step. At train time it is sampled from the future distribution, while at test time from the present distribution.  
+A sample from a distribution <img src="https://render.githubusercontent.com/render/math?math=\eta ~ \mathcal{N}(\mu, \sigma^2)">is given as input to the generator (the convolutional GRU) in the Prediction module.  This input is constant for every future time step. At train time it is sampled from the future distribution, while at test time from the present distribution.  
 So at train time, the future distribution sees the past and the future of video sequences. Since the data are diverse, the future distribution will naturally be multi-modal. But how can the present distribution be multimodal,  if it never sees in person the modes of the future? By forcing the present distribution to be similar to the future distribution via KL divergence. This happens in the probabilistic loss.
 
 <img src=
